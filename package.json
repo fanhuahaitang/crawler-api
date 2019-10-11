@@ -1,6 +1,6 @@
 {
   "name": "crawler2",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Crawler of typescript.",
   "main": "dist/crawler.js",
   "scripts": {
