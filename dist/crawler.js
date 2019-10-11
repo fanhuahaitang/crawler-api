@@ -45,13 +45,21 @@ function crawlerResponse(options, statusCodeCriticism) {
     });
 }
 exports.crawlerResponse = crawlerResponse;
-function crawlerFile(options, filePath) {
+/**
+ *
+ *
+ * @export
+ * @param {(string | requestOptions)} options
+ * @param {string} filePathName
+ * @returns {Promise<number>} file size
+ */
+function crawlerFile(options, filePathName) {
     return __awaiter(this, void 0, void 0, function* () {
-        if (!filePath) {
+        if (!filePathName) {
             throw new Error("Empty filePath of crawlerFile API are invalid.");
         }
         let newOptions = formatRequestOptions(options);
-        filePath = path_1.default.resolve(filePath);
+        filePathName = path_1.default.resolve(filePathName);
         return new Promise((resolve, reject) => {
             let status = "pending";
             request_1.default(newOptions)
@@ -67,11 +75,16 @@ function crawlerFile(options, filePath) {
                     reject(response.statusMessage);
                 }
             })
-                .pipe(fs_1.default.createWriteStream(filePath))
+                .pipe(fs_1.default.createWriteStream(filePathName))
                 .on("close", () => {
                 if (status === "pending") {
-                    let stats = fs_1.default.statSync(filePath);
-                    resolve(stats.size);
+                    try {
+                        let stats = fs_1.default.statSync(filePathName);
+                        resolve(stats.size);
+                    }
+                    catch (err) {
+                        reject(err);
+                    }
                 }
             });
         });
@@ -79,24 +92,26 @@ function crawlerFile(options, filePath) {
 }
 exports.crawlerFile = crawlerFile;
 function crawlerStaticWebpageAndJQuery(options, rule) {
-    if (!rule) {
-        rule = {
-            _: "html"
-        };
-    }
-    let newOptions = formatRequestOptions(options);
-    return new Promise((resolve, reject) => {
-        request_1.default(newOptions, (error, response, body) => {
-            if (error) {
-                reject(error);
-                return;
-            }
-            if (response.statusCode !== 200) {
-                reject(`${response.statusCode} ${response.statusMessage}`);
-                return;
-            }
-            let rootElement = cheerio_1.default.load(body).root();
-            resolve(parseElementByRule(rootElement, rule));
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!rule) {
+            rule = {
+                _: "html"
+            };
+        }
+        let newOptions = formatRequestOptions(options);
+        return yield new Promise((resolve, reject) => {
+            request_1.default(newOptions, (error, response, body) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                if (response.statusCode !== 200) {
+                    reject(`${response.statusCode} ${response.statusMessage}`);
+                    return;
+                }
+                let rootElement = cheerio_1.default.load(body).root();
+                resolve(parseElementByRule(rootElement, rule));
+            });
         });
     });
 }

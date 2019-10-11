@@ -39,16 +39,23 @@ export async function crawlerResponse(
     });
   });
 }
-
+/**
+ *
+ *
+ * @export
+ * @param {(string | requestOptions)} options
+ * @param {string} filePathName
+ * @returns {Promise<number>} file size
+ */
 export async function crawlerFile(
   options: string | requestOptions,
-  filePath: string
+  filePathName: string
 ): Promise<number> {
-  if (!filePath) {
+  if (!filePathName) {
     throw new Error("Empty filePath of crawlerFile API are invalid.");
   }
   let newOptions = formatRequestOptions(options);
-  filePath = path.resolve(filePath);
+  filePathName = path.resolve(filePathName);
   return new Promise((resolve, reject) => {
     let status = "pending";
     request(newOptions)
@@ -64,32 +71,46 @@ export async function crawlerFile(
           reject(response.statusMessage);
         }
       })
-      .pipe(fs.createWriteStream(filePath))
+      .pipe(fs.createWriteStream(filePathName))
       .on("close", () => {
         if (status === "pending") {
-          let stats = fs.statSync(filePath);
-          resolve(stats.size);
+          try {
+            let stats = fs.statSync(filePathName);
+            resolve(stats.size);
+          } catch (err) {
+            reject(err);
+          }
         }
       });
   });
 }
 
-export type RuleFunction =
+export interface Rule {
+  _?: RuleItem;
+  [x: string]: RuleItem;
+}
+
+// 处理html的一个标签对应元素的规则项，通过声明式的方式使用函数处理标签对应元素，获得返回值
+export type RuleItem =
+  // 此规则项处理元素，返回值为元素的文本、输入值、或网页内容；规则项为输入值时返回值不确定类型，为其他时返回值为字符串类型
   | "text"
   | "value"
   | "html"
+  // 上述三个规则项的别名写法，数组内，首个值为规则项
   | ["text" | "value" | "html"]
+  // 此规则项的返回值为元素，依据传入的string参数指定的某个数据属性，特性或状态
   | ["data" | "attr" | "prop" | "css", string]
+  /**
+   * 此规则项，会将第一个string参数当做css选择器，提取元素的子元素(html标签的内标签),再使用第二个参数作为传入的规则对象参数处理子元素
+   *
+   * findOne表示只提取首个符合css选择器的子元素，此时返回值为使用传入的规则对象参数处理此子元素的返回值
+   * find表示提取所有符合css选择器的子元素，此时返回值为使用传入的规则对象参数依次处理每个提取到的子元素的返回值组成的数组
+   */
   | ["findOne" | "find", string, Rule]
+  // 规则项是一个规则对象，返回值为此规则对象处理元素的返回值
   | Rule;
 
-export interface Rule {
-  //操作元素的规则，需配合一个元素使用；规则操作元素的返回值默认是一个对象，对象的每个键x的值，是使用键x对应的获取元素数据的方法获取到的元素数据；当拥有键“_”时，规则的返回值替换为键“_”对饮的获取元素数据的方法获取到的元素数据
-  _?: RuleFunction;
-  [x: string]: RuleFunction;
-}
-
-export function crawlerStaticWebpageAndJQuery(
+export async function crawlerStaticWebpageAndJQuery(
   options: string | requestOptions,
   rule?: Rule
 ): Promise<any> {
@@ -99,7 +120,7 @@ export function crawlerStaticWebpageAndJQuery(
     };
   }
   let newOptions = formatRequestOptions(options);
-  return new Promise((resolve, reject) => {
+  return await new Promise((resolve, reject) => {
     request(newOptions, (error, response, body) => {
       if (error) {
         reject(error);
@@ -115,7 +136,7 @@ export function crawlerStaticWebpageAndJQuery(
   });
 }
 
-function parseElementByFn(element: Cheerio, fn: RuleFunction): any {
+function parseElementByFn(element: Cheerio, fn: RuleItem): any {
   if (typeof fn === "string") {
     fn = [fn];
   }
