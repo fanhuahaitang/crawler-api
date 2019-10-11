@@ -39,14 +39,8 @@ export async function crawlerResponse(
     });
   });
 }
-/**
- *
- *
- * @export
- * @param {(string | requestOptions)} options
- * @param {string} filePathName
- * @returns {Promise<number>} file size
- */
+
+// 返回文件大小
 export async function crawlerFile(
   options: string | requestOptions,
   filePathName: string
@@ -56,7 +50,7 @@ export async function crawlerFile(
   }
   let newOptions = formatRequestOptions(options);
   filePathName = path.resolve(filePathName);
-  return new Promise((resolve, reject) => {
+  return await new Promise((resolve, reject) => {
     let status = "pending";
     request(newOptions)
       .on("error", err => {

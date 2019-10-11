@@ -4,8 +4,8 @@
   "description": "Crawler of typescript.",
   "main": "dist/crawler.js",
   "scripts": {
-    "gulp": "gulp",
     "tsc": "tsc",
+    "dev": "gulp watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -29,7 +29,7 @@ interface crawlerResponse {
 }
 
 interface crawlerFile {
-  (options: string | requestOptions, filePathName: string): Promise<number>; // The number is file size.
+  (options: string | requestOptions, filePathName: string): Promise<number>; // The number is file size of bytes.
 }
 
 //Use a jquery rule to get some info from the root element of the webpage.

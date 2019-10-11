@@ -45,14 +45,7 @@ function crawlerResponse(options, statusCodeCriticism) {
     });
 }
 exports.crawlerResponse = crawlerResponse;
-/**
- *
- *
- * @export
- * @param {(string | requestOptions)} options
- * @param {string} filePathName
- * @returns {Promise<number>} file size
- */
+// 返回文件大小
 function crawlerFile(options, filePathName) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!filePathName) {
@@ -60,7 +53,7 @@ function crawlerFile(options, filePathName) {
         }
         let newOptions = formatRequestOptions(options);
         filePathName = path_1.default.resolve(filePathName);
-        return new Promise((resolve, reject) => {
+        return yield new Promise((resolve, reject) => {
             let status = "pending";
             request_1.default(newOptions)
                 .on("error", err => {
