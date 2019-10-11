@@ -1,6 +1,12 @@
-# node-crawler2
+# crawler-api
 
 Some crawler api,which are briefness and powerful.
+
+## npm install
+
+```shell
+npm i crawler-api
+```
 
 ## API
 

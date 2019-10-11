@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wakhh/node-crawler2.git"
+    "url": "git+https://github.com/wakhh/crawler-api.git"
   },
   "keywords": [
     "cralwer",
@@ -19,9 +19,9 @@
   "author": "wakhh",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/wakhh/node-crawler2/issues"
+    "url": "https://github.com/wakhh/crawler-api/issues"
   },
-  "homepage": "https://github.com/wakhh/node-crawler2#readme",
+  "homepage": "https://github.com/wakhh/crawler-api#readme",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "request": "^2.88.0"
