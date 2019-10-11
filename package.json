@@ -1,0 +1,38 @@
+{
+  "name": "crawler2",
+  "version": "1.0.0",
+  "description": "Crawler of typescript.",
+  "main": "dist/crawler.js",
+  "scripts": {
+    "gulp": "gulp",
+    "tsc": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wakhh/node-crawler2.git"
+  },
+  "keywords": [
+    "cralwer",
+    "typescript"
+  ],
+  "author": "wakhh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wakhh/node-crawler2/issues"
+  },
+  "homepage": "https://github.com/wakhh/node-crawler2#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "@types/cheerio": "^0.22.13",
+    "@types/gulp": "^4.0.6",
+    "@types/node": "^12.7.12",
+    "@types/request": "^2.48.3",
+    "gulp": "^4.0.2",
+    "gulp-typescript": "^5.0.1",
+    "typescript": "^3.6.4"
+  }
+}
