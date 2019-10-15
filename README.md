@@ -1,5 +1,7 @@
 # crawler-api
 
+[![version](https://img.shields.io/npm/v/crawler-api.svg)](https://www.npmjs.com/package/crawler-api) [![npm downloads](https://img.shields.io/npm/dm/crawler-api.svg)](https://npm-stat.com/charts.html?package=crawler-api&from=2019-10-10)
+
 Some crawler api,which are briefness and powerful.
 
 ## npm install
